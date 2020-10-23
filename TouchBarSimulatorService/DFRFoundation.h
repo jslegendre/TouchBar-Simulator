@@ -16,7 +16,7 @@ typedef enum  {
 /*!
  @function DFRTouchBarSimulatorCreate
  @abstract C-style initializer for DFRTouchBarSimulator
- @param generation First generation (2) uses legacy API, secon generation uses newer API as shown in this project
+ @param generation First generation (2) uses legacy API, second generation (3) uses newer API as shown in this project
  @param properties This is always NULL so I'm really not sure what options exist.
  @param sameAsGeneration Not sure why this is needed but if it holds a different value than generation, it won't work.
  */
