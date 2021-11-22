@@ -23,7 +23,12 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     self.window.worksWhenModal = YES;
     [self.window _setPreventsActivation:YES];
-    self.window.styleMask |= NSWindowStyleMaskUtilityWindow;
+    [self.window setIgnoresMouseEvents:NO];
+    // Touchbar pixel size @2x scaled is 2008 x 60
+    //self.window.aspectRatio = NSMakeSize(502, 15);
+    
+    // Retina scaling (1004 x 30) + 10px padding is 1014 x 40
+    self.window.aspectRatio = NSMakeSize(507, 20); //NSMakeSize(169, 5);
     self.window.movableByWindowBackground = NO;
     self.window.contentView.wantsLayer = YES;
     self.window.contentView.layer.backgroundColor = NSColor.blackColor.CGColor;
@@ -33,7 +38,6 @@
         self.window.contentViewController = remoteViewController;
     }];
 }
-
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
     return YES;
