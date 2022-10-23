@@ -45,22 +45,9 @@
 
 - (instancetype)initWithFrame:(NSRect)frameRect {
     self = [super initWithFrame:frameRect];
-    self.layer.backgroundColor = NSColor.blackColor.CGColor;
+    self.layer.backgroundColor = NSColor.clearColor.CGColor;
     self.wantsLayer = YES;
     return self;
-}
-
-@end
-
-@interface TouchBarSimulatorServiceView ()
-@end
-
-@implementation TouchBarSimulatorServiceView
-
-- (void)awakeFromNib {
-    [self.window setColorSpace:[NSColorSpace displayP3ColorSpace]];
-    self.wantsLayer = YES;
-    self.layer.backgroundColor = NSColor.blackColor.CGColor;
 }
 
 @end
@@ -72,7 +59,9 @@
 @property (nonatomic,strong) CIImage *frame;
 @property (nonatomic,strong) id<MTLDevice> device;
 @property (nonatomic,strong) id<MTLCommandQueue> commandQueue;
+@property (nonatomic,strong) MTLRenderPipelineDescriptor *renderPipelineDesc;
 @property (nonatomic,strong) CIContext *context;
+@property IOSurfaceRef surface;
 @end
 
 @implementation TouchBarSimulatorService
@@ -80,14 +69,20 @@
 
 - (void)drawInMTKView:(MTKView *)view {
     if(!_frame) return;
-    id<MTLTexture> outputTexture = _mtlView.currentDrawable.texture;
-    if (!outputTexture) return;
-    if (_frame.extent.size.width == 0) return;
+    if(!_surface) return;
+
+    MTLTextureDescriptor *desc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatBGRA8Unorm width:IOSurfaceGetWidth(_surface) height:IOSurfaceGetHeight(_surface) mipmapped:NO];
     
-    _mtlView.drawableSize = _frame.extent.size;
-    id<MTLCommandBuffer> commandBuffer = [self.commandQueue commandBuffer];
-    [self.context render:_frame toMTLTexture:outputTexture commandBuffer:commandBuffer bounds:_frame.extent colorSpace:CGColorSpaceCreateDeviceRGB()];
-    [commandBuffer presentDrawable:self.mtlView.currentDrawable];
+    id<MTLTexture> newTexture = [_device newTextureWithDescriptor:desc iosurface:_surface plane:0];
+    id<MTLCommandBuffer> commandBuffer = [_commandQueue commandBuffer];
+    
+    id <MTLRenderCommandEncoder> encoder = [commandBuffer renderCommandEncoderWithDescriptor:_mtlView.currentRenderPassDescriptor];
+    id <MTLRenderPipelineState> state = [_device newRenderPipelineStateWithDescriptor:_renderPipelineDesc error:NULL];
+    [encoder setRenderPipelineState:state];
+    [encoder setFragmentTexture:newTexture atIndex:0];
+    [encoder drawPrimitives:MTLPrimitiveTypeTriangleStrip vertexStart:0 vertexCount:4 instanceCount:1];
+    [encoder endEncoding];
+    [commandBuffer presentDrawable:_mtlView.currentDrawable];
     [commandBuffer commit];
 }
 
@@ -97,15 +92,28 @@
     self.frame = nil;
     self.device = MTLCreateSystemDefaultDevice();
     self.mtlView = [[MTKView alloc] initWithFrame:self.view.frame device:self.device];
+    self.mtlView.layer.backgroundColor = NSColor.clearColor.CGColor;
+    self.mtlView.layer.opaque = NO;
     self.mtlView.clearColor = MTLClearColorMake(0, 0, 0, 0);
     self.mtlView.delegate = self;
     self.mtlView.framebufferOnly = NO;
     self.mtlView.autoResizeDrawable = YES;
     self.mtlView.enableSetNeedsDisplay = YES;
+    self.mtlView.colorPixelFormat = MTLPixelFormatBGRA8Unorm;
+    
     self.context = [CIContext contextWithMTLDevice:self.device options:@{kCIContextWorkingColorSpace: (__bridge id)CGColorSpaceCreateDeviceRGB(), kCIContextUseSoftwareRenderer: [NSNumber numberWithBool:NO], kCIContextHighQualityDownsample: [NSNumber numberWithBool:YES]}];
     self.commandQueue = [self.device newCommandQueue];
     self.mtlView.frame = NSMakeRect(5, 5, 1004, 30);
     [self.view addSubview:_mtlView];
+    
+    id <MTLLibrary> lib = [_device newDefaultLibraryWithBundle:[NSBundle bundleForClass:[TouchBarSimulatorService class]] error:nil];
+    _renderPipelineDesc = [MTLRenderPipelineDescriptor new];
+    _renderPipelineDesc.sampleCount = 1;
+    _renderPipelineDesc.alphaToCoverageEnabled = YES;
+    _renderPipelineDesc.colorAttachments[0].pixelFormat = MTLPixelFormatBGRA8Unorm;
+    _renderPipelineDesc.depthAttachmentPixelFormat = MTLPixelFormatInvalid;
+    _renderPipelineDesc.vertexFunction = [lib newFunctionWithName:@"mapTexture"];
+    _renderPipelineDesc.fragmentFunction = [lib newFunctionWithName:@"displayTexture"];
     
     TouchBarSimulatorStreamView *streamView = [[TouchBarSimulatorStreamView alloc] initWithFrame:NSMakeRect(5, 5, 1004, 30)];
     [self.view addSubview:streamView];
@@ -115,6 +123,7 @@
     
     DFRTouchBar *touchBar = DFRTouchBarSimulatorGetTouchBar(self.simulator);
     self.touchBarStream = DFRTouchBarCreateDisplayStream(touchBar, 0, dispatch_get_main_queue(), ^(CGDisplayStreamFrameStatus status, uint64_t displayTime, IOSurfaceRef  _Nullable frameSurface, CGDisplayStreamUpdateRef  _Nullable updateRef) {
+        self->_surface = frameSurface;
         self->_frame = [CIImage imageWithIOSurface:frameSurface];
         self->_mtlView.needsDisplay = YES;
 //        streamView.layer.contents = (__bridge id _Nullable)(frameSurface);

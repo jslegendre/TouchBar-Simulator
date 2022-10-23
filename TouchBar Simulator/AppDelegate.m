@@ -24,6 +24,7 @@
     self.window.worksWhenModal = YES;
     [self.window _setPreventsActivation:YES];
     [self.window setIgnoresMouseEvents:NO];
+    self.window.contentView.layer.backgroundColor = NSColor.clearColor.CGColor;
     // Touchbar pixel size @2x scaled is 2008 x 60
     //self.window.aspectRatio = NSMakeSize(502, 15);
     
@@ -31,8 +32,6 @@
     self.window.aspectRatio = NSMakeSize(507, 20); //NSMakeSize(169, 5);
     self.window.movableByWindowBackground = NO;
     self.window.contentView.wantsLayer = YES;
-    self.window.contentView.layer.backgroundColor = NSColor.blackColor.CGColor;
-    self.window.collectionBehavior |= NSWindowCollectionBehaviorCanJoinAllSpaces;
     
     [NSRemoteViewController requestViewController:@"TouchBarSimulatorService" fromServiceWithBundleIdentifier:@"com.github.jslegendre.TouchBarSimulatorService" connectionHandler:^(NSRemoteViewController* remoteViewController){
         self.window.contentViewController = remoteViewController;
