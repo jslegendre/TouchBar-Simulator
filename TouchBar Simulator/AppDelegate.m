@@ -6,11 +6,21 @@
 //
 
 #import <ViewBridge/ViewBridge.h>
-
 #import "AppDelegate.h"
 
-@interface NSWindow (Private)
-- (void )_setPreventsActivation:(bool)preventsActivation;
+@interface TBSimulatorPanel : NSPanel
+@end
+
+@implementation TBSimulatorPanel
+
+- (BOOL)canBecomeKeyWindow {
+    return NO;
+}
+
+- (BOOL)isResizable {
+    return YES;
+}
+
 @end
 
 @interface AppDelegate ()
@@ -21,21 +31,51 @@
 @implementation AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    self.window.worksWhenModal = YES;
-    [self.window _setPreventsActivation:YES];
-    [self.window setIgnoresMouseEvents:NO];
+
     self.window.contentView.layer.backgroundColor = NSColor.clearColor.CGColor;
-    // Touchbar pixel size @2x scaled is 2008 x 60
-    //self.window.aspectRatio = NSMakeSize(502, 15);
-    
-    // Retina scaling (1004 x 30) + 10px padding is 1014 x 40
-    self.window.aspectRatio = NSMakeSize(507, 20); //NSMakeSize(169, 5);
+
+    self.window.contentAspectRatio = NSMakeSize(1014, 40);
     self.window.movableByWindowBackground = NO;
     self.window.contentView.wantsLayer = YES;
+    self.window.level = kCGFloatingWindowLevel;
     
-    [NSRemoteViewController requestViewController:@"TouchBarSimulatorService" fromServiceWithBundleIdentifier:@"com.github.jslegendre.TouchBarSimulatorService" connectionHandler:^(NSRemoteViewController* remoteViewController){
-        self.window.contentViewController = remoteViewController;
+    NSString *savedWindowFrame = [[NSUserDefaults standardUserDefaults] objectForKey:@"savedWindowFrame"];
+    if (savedWindowFrame) {
+        [self.window setFrameFromString:savedWindowFrame];
+    }
+    
+    NSRemoteView *remoteView = [[NSRemoteView alloc] initWithFrame: CGRectMake(0, 0, 1004, 30)];
+    [remoteView setSynchronizesImplicitAnimations:NO];
+    [remoteView setServiceName:@"com.github.jslegendre.TouchBarSimulatorService"];
+    [remoteView setServiceSubclassName:@"TouchBarSimulatorService"];
+    [remoteView advanceToRunPhaseIfNeeded:^(NSError *err){
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            NSView *contentView = self.window.contentView;
+            [contentView addSubview:remoteView];
+
+            [remoteView setTranslatesAutoresizingMaskIntoConstraints:NO];
+            [remoteView setShouldMaskToBounds:NO];
+            [[remoteView layer] setAllowsEdgeAntialiasing:YES];
+
+            NSDictionary *dict = NSDictionaryOfVariableBindings(remoteView);
+            NSArray *constraintsArray = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[remoteView]-5-|"
+                                                                                options:0
+                                                                                metrics:nil
+                                                                                  views:dict];
+
+            constraintsArray = [constraintsArray arrayByAddingObjectsFromArray:
+                                [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5-[remoteView]-5-|"
+                                                                       options:0
+                                                                       metrics:nil
+                                                                         views:dict]];
+            [contentView addConstraints:constraintsArray];
+            [NSLayoutConstraint activateConstraints:constraintsArray];
+
+            [contentView layoutSubtreeIfNeeded];
+            
+        });
     }];
+
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
@@ -43,6 +83,8 @@
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
+    [[NSUserDefaults standardUserDefaults] setObject:self.window.stringWithSavedFrame forKey:@"savedWindowFrame"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     [(NSRemoteViewController *)self.window.contentViewController disconnect];
 }
 
