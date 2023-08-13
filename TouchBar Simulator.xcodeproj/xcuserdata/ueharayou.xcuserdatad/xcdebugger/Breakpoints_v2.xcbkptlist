@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "95E518C9-FDFD-466E-BA4F-8D41754E2FF8"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BEB91A2B-8FA7-40C1-8195-530A76647DFE"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TouchBarSimulatorService/TouchBarSimulatorService.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "58"
+            endingLineNumber = "58"
+            landmarkName = "-mouseMoved:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "40A356D6-0DDE-4304-8542-706B11469915"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TouchBarSimulator/Main.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "25"
+            endingLineNumber = "25"
+            landmarkName = "main()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9EEB6B84-052E-4A6C-B220-5CB186BA50BF"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TouchBarSimulator/Legacy/LeAppDelegate.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "39"
+            endingLineNumber = "39"
+            landmarkName = "-applicationDidFinishLaunching:"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "9EEB6B84-052E-4A6C-B220-5CB186BA50BF - af76d3ceb5836bec"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[LEAppDelegate applicationDidFinishLaunching:]"
+                  moduleName = "TouchBarSimulator"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ueharayou/Projects.localized/TouchBarSimulator/TouchBarSimulator/Legacy/LeAppDelegate.m"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "39"
+                  endingLineNumber = "39"
+                  offsetFromSymbolStart = "204">
+               </Location>
+               <Location
+                  uuid = "9EEB6B84-052E-4A6C-B220-5CB186BA50BF - af76d3ceb5836b8d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[LEAppDelegate applicationDidFinishLaunching:]"
+                  moduleName = "TouchBarSimulator"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ueharayou/Projects.localized/TouchBarSimulator/TouchBarSimulator/Legacy/LeAppDelegate.m"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "38"
+                  endingLineNumber = "38"
+                  offsetFromSymbolStart = "216">
+               </Location>
+               <Location
+                  uuid = "9EEB6B84-052E-4A6C-B220-5CB186BA50BF - af76d3ceb5836b8d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[LEAppDelegate applicationDidFinishLaunching:]"
+                  moduleName = "TouchBarSimulator"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ueharayou/Projects.localized/TouchBarSimulator/TouchBarSimulator/Legacy/LeAppDelegate.m"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "38"
+                  endingLineNumber = "38"
+                  offsetFromSymbolStart = "156">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
