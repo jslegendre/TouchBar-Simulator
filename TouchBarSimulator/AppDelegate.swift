@@ -23,7 +23,7 @@ class AppDelegate: NSObject, NSApplicationDelegate{
     }
     
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
-        //PreferencesWindowController.showPrefWindow()
+        TouchBarWindow.dockSetting = .floating
         NSLog("App Reopened.")
         return true
     }

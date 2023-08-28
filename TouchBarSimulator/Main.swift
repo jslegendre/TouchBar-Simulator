@@ -25,6 +25,7 @@ import AppKit
             NSLog("App started.")
             let delegate = AppDelegate()
             NSApplication.shared.delegate = delegate
+            NSApplication.shared.setActivationPolicy(.accessory)
             /*
             let infoDict = Bundle.main.infoDictionary
             NSLog("\(infoDict!)")

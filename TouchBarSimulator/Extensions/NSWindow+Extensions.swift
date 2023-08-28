@@ -12,21 +12,27 @@ extension NSWindow {
 }
 
 extension NSWindow {
-    enum MoveXPositioning {
+    enum ScreenXPositioning {
+        case retained
+        case leftOut
         case left
         case center
         case right
+        case rightOut
     }
 
-    enum MoveYPositioning {
+    enum ScreenYPositioning {
+        case retained
+        case topOut
         case top
         case center
         case bottom
+        case bottomOut
     }
 
-    func moveTo(x xPositioning: MoveXPositioning, y yPositioning: MoveYPositioning) {
+    func alignedOrigin(_ xPositioning: ScreenXPositioning, _ yPositioning: ScreenYPositioning) -> CGPoint {
         guard let screen = NSScreen.main else {
-            return
+            return frame.origin
         }
 
         let visibleFrame = screen.visibleFrame
@@ -34,14 +40,22 @@ extension NSWindow {
         let x: Double
         let y: Double
         switch xPositioning {
+        case .leftOut:
+            x = screen.frame.minX - frame.width - 1
         case .left:
             x = visibleFrame.minX
         case .center:
             x = visibleFrame.midX - frame.width / 2
         case .right:
             x = visibleFrame.maxX - frame.width
+        case .rightOut:
+            x = screen.frame.maxX + 1
+        case .retained:
+            x = frame.origin.x
         }
         switch yPositioning {
+        case .topOut:
+            y = screen.frame.maxY + 1
         case .top:
             // Defect fix: Keep docked windows below menubar area.
             // Previously, the window would obstruct menubar clicks when the menubar was set to auto-hide.
@@ -52,10 +66,16 @@ extension NSWindow {
             y = visibleFrame.midY - frame.height / 2
         case .bottom:
             y = visibleFrame.minY
+        case .bottomOut:
+            y = screen.frame.minY - frame.height - 1
+        case .retained:
+            y = frame.origin.y
         }
 
-        setFrameOrigin(CGPoint(x: x, y: y))
+        return CGPoint(x: x, y: y)
+        //return CGRect(x: x, y: y, width: frame.width, height: frame.height)
     }
+    
 }
 
 

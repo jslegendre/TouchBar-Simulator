@@ -25,6 +25,7 @@
 		FB13F67E2A88259900212F02 /* Defaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB13F67C2A88259900212F02 /* Defaults+Extensions.swift */; };
 		FB13F67F2A88259900212F02 /* NSWindow+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB13F67D2A88259900212F02 /* NSWindow+Extensions.swift */; };
 		FB13F6812A8825A500212F02 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB13F6802A8825A500212F02 /* Utils.swift */; };
+		FBF7C67E2A9BD7F90069DDD2 /* TouchBarAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF7C67D2A9BD7F90069DDD2 /* TouchBarAnimation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +79,7 @@
 		FB13F67C2A88259900212F02 /* Defaults+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Defaults+Extensions.swift"; sourceTree = "<group>"; };
 		FB13F67D2A88259900212F02 /* NSWindow+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSWindow+Extensions.swift"; sourceTree = "<group>"; };
 		FB13F6802A8825A500212F02 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		FBF7C67D2A9BD7F90069DDD2 /* TouchBarAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchBarAnimation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,6 +164,7 @@
 				FB0CD4282A883CD900771CC0 /* Info.plist */,
 				FB13F67B2A88259900212F02 /* Extensions */,
 				FB13F6802A8825A500212F02 /* Utils.swift */,
+				FBF7C67D2A9BD7F90069DDD2 /* TouchBarAnimation.swift */,
 				FB13F6792A88258700212F02 /* TouchBarWindow.swift */,
 				FB13F6772A8824F400212F02 /* AppDelegate.swift */,
 				FB13F6732A88246400212F02 /* Globals.swift */,
@@ -302,6 +305,7 @@
 			files = (
 				FB13F6782A8824F400212F02 /* AppDelegate.swift in Sources */,
 				FB13F6742A88246400212F02 /* Globals.swift in Sources */,
+				FBF7C67E2A9BD7F90069DDD2 /* TouchBarAnimation.swift in Sources */,
 				FB13F67F2A88259900212F02 /* NSWindow+Extensions.swift in Sources */,
 				FB13F6812A8825A500212F02 /* Utils.swift in Sources */,
 				FB13F67E2A88259900212F02 /* Defaults+Extensions.swift in Sources */,
@@ -443,14 +447,14 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 47HK3524RN;
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)";
 				INFOPLIST_FILE = TouchBarSimulatorService/Info.plist;
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = moe.ueharayou.TouchBarSimulatorService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -466,14 +470,14 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 47HK3524RN;
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)";
 				INFOPLIST_FILE = TouchBarSimulatorService/Info.plist;
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = moe.ueharayou.TouchBarSimulatorService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -494,7 +498,7 @@
 				CODE_SIGN_ENTITLEMENTS = TouchBarSimulator/TouchBarSimulator.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"TouchBarSimulator\"";
 				DEVELOPMENT_TEAM = 47HK3524RN;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -508,7 +512,7 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = moe.ueharayou.TouchBarSimulator.TouchBarSimulator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -533,7 +537,7 @@
 				CODE_SIGN_ENTITLEMENTS = TouchBarSimulator/TouchBarSimulator.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"TouchBarSimulator\"";
 				DEVELOPMENT_TEAM = 47HK3524RN;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -547,7 +551,7 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = moe.ueharayou.TouchBarSimulator.TouchBarSimulator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_COMPILATION_MODE = wholemodule;
