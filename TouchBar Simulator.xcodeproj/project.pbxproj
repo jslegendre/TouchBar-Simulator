@@ -25,6 +25,11 @@
 		FB13F67E2A88259900212F02 /* Defaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB13F67C2A88259900212F02 /* Defaults+Extensions.swift */; };
 		FB13F67F2A88259900212F02 /* NSWindow+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB13F67D2A88259900212F02 /* NSWindow+Extensions.swift */; };
 		FB13F6812A8825A500212F02 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB13F6802A8825A500212F02 /* Utils.swift */; };
+		FB32352B2AC2D598004A50A1 /* TouchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB32352A2AC2D598004A50A1 /* TouchBarView.swift */; };
+		FB32352D2AC30175004A50A1 /* NSImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB32352C2AC30175004A50A1 /* NSImage+Extensions.swift */; };
+		FB3235302AC310D1004A50A1 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = FB32352F2AC310D1004A50A1 /* LaunchAtLogin */; };
+		FB3235352AC32A3E004A50A1 /* TouchBarContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB3235342AC32A3E004A50A1 /* TouchBarContextMenu.swift */; };
+		FB3235372AC32A8F004A50A1 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB3235362AC32A8F004A50A1 /* String+Extensions.swift */; };
 		FBF7C67E2A9BD7F90069DDD2 /* TouchBarAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF7C67D2A9BD7F90069DDD2 /* TouchBarAnimation.swift */; };
 /* End PBXBuildFile section */
 
@@ -79,6 +84,11 @@
 		FB13F67C2A88259900212F02 /* Defaults+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Defaults+Extensions.swift"; sourceTree = "<group>"; };
 		FB13F67D2A88259900212F02 /* NSWindow+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSWindow+Extensions.swift"; sourceTree = "<group>"; };
 		FB13F6802A8825A500212F02 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		FB3235292AC2CBBF004A50A1 /* Trash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trash.swift; sourceTree = "<group>"; };
+		FB32352A2AC2D598004A50A1 /* TouchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchBarView.swift; sourceTree = "<group>"; };
+		FB32352C2AC30175004A50A1 /* NSImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImage+Extensions.swift"; sourceTree = "<group>"; };
+		FB3235342AC32A3E004A50A1 /* TouchBarContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchBarContextMenu.swift; sourceTree = "<group>"; };
+		FB3235362AC32A8F004A50A1 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		FBF7C67D2A9BD7F90069DDD2 /* TouchBarAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchBarAnimation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -96,6 +106,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB3235302AC310D1004A50A1 /* LaunchAtLogin in Frameworks */,
 				FB13F6762A88249200212F02 /* Defaults in Frameworks */,
 				FB13F66F2A88242200212F02 /* ViewBridge.framework in Frameworks */,
 			);
@@ -107,6 +118,7 @@
 		0906CDCD24E89EE6006B05A4 = {
 			isa = PBXGroup;
 			children = (
+				FB3235292AC2CBBF004A50A1 /* Trash.swift */,
 				0906CE0724E8A1BA006B05A4 /* ViewBridge */,
 				FB13F65C2A88231C00212F02 /* TouchBarSimulator */,
 				0906CDF524E89F3B006B05A4 /* TouchBarSimulatorService */,
@@ -164,8 +176,10 @@
 				FB0CD4282A883CD900771CC0 /* Info.plist */,
 				FB13F67B2A88259900212F02 /* Extensions */,
 				FB13F6802A8825A500212F02 /* Utils.swift */,
+				FB3235342AC32A3E004A50A1 /* TouchBarContextMenu.swift */,
 				FBF7C67D2A9BD7F90069DDD2 /* TouchBarAnimation.swift */,
 				FB13F6792A88258700212F02 /* TouchBarWindow.swift */,
+				FB32352A2AC2D598004A50A1 /* TouchBarView.swift */,
 				FB13F6772A8824F400212F02 /* AppDelegate.swift */,
 				FB13F6732A88246400212F02 /* Globals.swift */,
 				FB13F6712A88244E00212F02 /* Main.swift */,
@@ -180,7 +194,9 @@
 			isa = PBXGroup;
 			children = (
 				FB13F67C2A88259900212F02 /* Defaults+Extensions.swift */,
+				FB32352C2AC30175004A50A1 /* NSImage+Extensions.swift */,
 				FB13F67D2A88259900212F02 /* NSWindow+Extensions.swift */,
+				FB3235362AC32A8F004A50A1 /* String+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -213,6 +229,7 @@
 				FB13F6582A88231C00212F02 /* Frameworks */,
 				FB13F6592A88231C00212F02 /* Resources */,
 				FB0CD4262A883B9700771CC0 /* Embed XPC Services */,
+				FB3235312AC3113B004A50A1 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -222,6 +239,7 @@
 			name = TouchBarSimulator;
 			packageProductDependencies = (
 				FB13F6752A88249200212F02 /* Defaults */,
+				FB32352F2AC310D1004A50A1 /* LaunchAtLogin */,
 			);
 			productName = TouchBarSimulator;
 			productReference = FB13F65B2A88231C00212F02 /* TouchBarSimulator.app */;
@@ -257,6 +275,7 @@
 			mainGroup = 0906CDCD24E89EE6006B05A4;
 			packageReferences = (
 				FB13F6402A87FCE200212F02 /* XCRemoteSwiftPackageReference "Defaults" */,
+				FB32352E2AC310D1004A50A1 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */,
 			);
 			productRefGroup = 0906CDD724E89EE6006B05A4 /* Products */;
 			projectDirPath = "";
@@ -288,6 +307,30 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		FB3235312AC3113B004A50A1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${BUILT_PRODUCTS_DIR}/LaunchAtLogin_LaunchAtLogin.bundle/Contents/Resources/copy-helper-swiftpm.sh",
+				"${BUILT_PRODUCTS_DIR}/LaunchAtLogin_LaunchAtLogin.bundle/Contents/Resources/LaunchAtLoginHelper.zip",
+				"${BUILT_PRODUCTS_DIR}/LaunchAtLogin_LaunchAtLogin.bundle/Contents/Resources/LaunchAtLoginHelper-with-runtime.zip",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${BUILT_PRODUCTS_DIR}/LaunchAtLogin_LaunchAtLogin.bundle/Contents/Resources/copy-helper-swiftpm.sh\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		0906CDF024E89F3B006B05A4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -303,13 +346,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB3235352AC32A3E004A50A1 /* TouchBarContextMenu.swift in Sources */,
 				FB13F6782A8824F400212F02 /* AppDelegate.swift in Sources */,
 				FB13F6742A88246400212F02 /* Globals.swift in Sources */,
 				FBF7C67E2A9BD7F90069DDD2 /* TouchBarAnimation.swift in Sources */,
+				FB3235372AC32A8F004A50A1 /* String+Extensions.swift in Sources */,
 				FB13F67F2A88259900212F02 /* NSWindow+Extensions.swift in Sources */,
 				FB13F6812A8825A500212F02 /* Utils.swift in Sources */,
 				FB13F67E2A88259900212F02 /* Defaults+Extensions.swift in Sources */,
+				FB32352B2AC2D598004A50A1 /* TouchBarView.swift in Sources */,
 				FB13F6722A88244E00212F02 /* Main.swift in Sources */,
+				FB32352D2AC30175004A50A1 /* NSImage+Extensions.swift in Sources */,
 				FB13F67A2A88258700212F02 /* TouchBarWindow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -498,7 +545,7 @@
 				CODE_SIGN_ENTITLEMENTS = TouchBarSimulator/TouchBarSimulator.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"TouchBarSimulator\"";
 				DEVELOPMENT_TEAM = 47HK3524RN;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -512,8 +559,8 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 1.1.2;
-				PRODUCT_BUNDLE_IDENTIFIER = moe.ueharayou.TouchBarSimulator.TouchBarSimulator;
+				MARKETING_VERSION = 1.1.3;
+				PRODUCT_BUNDLE_IDENTIFIER = moe.ueharayou.TouchBarSimulator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -537,7 +584,7 @@
 				CODE_SIGN_ENTITLEMENTS = TouchBarSimulator/TouchBarSimulator.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"TouchBarSimulator\"";
 				DEVELOPMENT_TEAM = 47HK3524RN;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -551,8 +598,8 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 1.1.2;
-				PRODUCT_BUNDLE_IDENTIFIER = moe.ueharayou.TouchBarSimulator.TouchBarSimulator;
+				MARKETING_VERSION = 1.1.3;
+				PRODUCT_BUNDLE_IDENTIFIER = moe.ueharayou.TouchBarSimulator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -606,6 +653,14 @@
 				kind = branch;
 			};
 		};
+		FB32352E2AC310D1004A50A1 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/LaunchAtLogin";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -613,6 +668,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FB13F6402A87FCE200212F02 /* XCRemoteSwiftPackageReference "Defaults" */;
 			productName = Defaults;
+		};
+		FB32352F2AC310D1004A50A1 /* LaunchAtLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FB32352E2AC310D1004A50A1 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */;
+			productName = LaunchAtLogin;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

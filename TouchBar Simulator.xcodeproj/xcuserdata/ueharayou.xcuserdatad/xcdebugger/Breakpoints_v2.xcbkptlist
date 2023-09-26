@@ -189,7 +189,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "27"
             endingLineNumber = "27"
-            landmarkName = "animate"
+            landmarkName = "animation"
             landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
@@ -203,8 +203,8 @@
             filePath = "TouchBarSimulator/TouchBarWindow.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "229"
-            endingLineNumber = "229"
+            startingLineNumber = "304"
+            endingLineNumber = "304"
             landmarkName = "moveWithAnimation(destination:)"
             landmarkType = "7">
             <Locations>
@@ -255,6 +255,38 @@
             endingLineNumber = "35"
             landmarkName = "applicationWillTerminate(_:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "EFF2672C-CAF9-4EFD-A3DB-B05EDDCE7E0E - c7be6a8f5738bda5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TouchBarSimulator.AppDelegate.applicationWillTerminate(Foundation.Notification) -&gt; ()"
+                  moduleName = "TouchBarSimulator"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ueharayou/Projects.localized/TouchBarSimulator/TouchBarSimulator/AppDelegate.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "37"
+                  endingLineNumber = "37"
+                  offsetFromSymbolStart = "136">
+               </Location>
+               <Location
+                  uuid = "EFF2672C-CAF9-4EFD-A3DB-B05EDDCE7E0E - c7be6a8f5738bde7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TouchBarSimulator.AppDelegate.applicationWillTerminate(Foundation.Notification) -&gt; ()"
+                  moduleName = "TouchBarSimulator"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ueharayou/Projects.localized/TouchBarSimulator/TouchBarSimulator/AppDelegate.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "35"
+                  endingLineNumber = "35"
+                  offsetFromSymbolStart = "136">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -302,6 +334,21 @@
                   endingLineNumber = "33"
                   offsetFromSymbolStart = "984">
                </Location>
+               <Location
+                  uuid = "D98611E7-2889-45F6-B315-723F251FC59C - 426f1094907c9578"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "static TouchBarSimulator.MyApp.main() -&gt; ()"
+                  moduleName = "TouchBarSimulator"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ueharayou/Projects.localized/TouchBarSimulator/TouchBarSimulator/Main.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "34"
+                  endingLineNumber = "34"
+                  offsetFromSymbolStart = "1052">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -315,9 +362,9 @@
             filePath = "TouchBarSimulator/TouchBarWindow.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "311"
-            endingLineNumber = "311"
-            landmarkName = "finishUp()"
+            startingLineNumber = "388"
+            endingLineNumber = "388"
+            landmarkName = "setUp()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -357,14 +404,14 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "3B06C6FE-24B7-4DDC-828C-45A26CF95CA2"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TouchBarSimulator/TouchBarWindow.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "89"
-            endingLineNumber = "89"
+            startingLineNumber = "143"
+            endingLineNumber = "143"
             landmarkName = "dockDownPressed(_:)"
             landmarkType = "7">
             <Locations>
@@ -398,6 +445,21 @@
                   endingLineNumber = "81"
                   offsetFromSymbolStart = "36">
                </Location>
+               <Location
+                  uuid = "3B06C6FE-24B7-4DDC-828C-45A26CF95CA2 - caf51acafb23f7dc"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TouchBarSimulator.TouchBarWindow.dockDownPressed(__C.NSButton) -&gt; ()"
+                  moduleName = "TouchBarSimulator"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ueharayou/Projects.localized/TouchBarSimulator/TouchBarSimulator/TouchBarWindow.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "121"
+                  endingLineNumber = "121"
+                  offsetFromSymbolStart = "36">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -405,14 +467,14 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "2DE92833-287A-4D4F-A998-09BF7AA5CCCE"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TouchBarSimulator/TouchBarWindow.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "93"
-            endingLineNumber = "93"
+            startingLineNumber = "147"
+            endingLineNumber = "147"
             landmarkName = "dockUpPressed(_:)"
             landmarkType = "7">
             <Locations>
@@ -445,6 +507,179 @@
                   startingLineNumber = "85"
                   endingLineNumber = "85"
                   offsetFromSymbolStart = "36">
+               </Location>
+               <Location
+                  uuid = "2DE92833-287A-4D4F-A998-09BF7AA5CCCE - 24232ab375a24ba7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TouchBarSimulator.TouchBarWindow.dockUpPressed(__C.NSButton) -&gt; ()"
+                  moduleName = "TouchBarSimulator"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ueharayou/Projects.localized/TouchBarSimulator/TouchBarSimulator/TouchBarWindow.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "125"
+                  endingLineNumber = "125"
+                  offsetFromSymbolStart = "36">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "755AA9F5-8C45-44A3-9808-2AC341213F0F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TouchBarSimulator/TouchBarView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "16"
+            endingLineNumber = "16"
+            landmarkName = "dockReleasePressed(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "755AA9F5-8C45-44A3-9808-2AC341213F0F - fdf1fd3a48b5d2f6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TouchBarSimulator.TouchBarViewFactory.TouchBarView.dockReleasePressed(__C.NSButton) -&gt; ()"
+                  moduleName = "TouchBarSimulator"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ueharayou/Projects.localized/TouchBarSimulator/TouchBarSimulator/TouchBarView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "15"
+                  endingLineNumber = "15"
+                  offsetFromSymbolStart = "40">
+               </Location>
+               <Location
+                  uuid = "755AA9F5-8C45-44A3-9808-2AC341213F0F - fdf1fd3a48b5d2d5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TouchBarSimulator.TouchBarViewFactory.TouchBarView.dockReleasePressed(__C.NSButton) -&gt; ()"
+                  moduleName = "TouchBarSimulator"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ueharayou/Projects.localized/TouchBarSimulator/TouchBarSimulator/TouchBarView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "16"
+                  endingLineNumber = "16"
+                  offsetFromSymbolStart = "52">
+               </Location>
+               <Location
+                  uuid = "755AA9F5-8C45-44A3-9808-2AC341213F0F - 5143100206149319"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.NSButton) -&gt; () in implicit closure #1 () throws -&gt; (__C.NSButton) -&gt; () in TouchBarSimulator.TouchBarViewFactory.TouchBarView.dockReleasePressed(__C.NSButton) -&gt; ()"
+                  moduleName = "TouchBarSimulator"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ueharayou/Projects.localized/TouchBarSimulator/TouchBarSimulator/TouchBarView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "16"
+                  endingLineNumber = "16"
+                  offsetFromSymbolStart = "44">
+               </Location>
+               <Location
+                  uuid = "755AA9F5-8C45-44A3-9808-2AC341213F0F - fdf1fd3a48b5d2d5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TouchBarSimulator.TouchBarViewFactory.TouchBarView.dockReleasePressed(__C.NSButton) -&gt; ()"
+                  moduleName = "TouchBarSimulator"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ueharayou/Projects.localized/TouchBarSimulator/TouchBarSimulator/TouchBarView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "16"
+                  endingLineNumber = "16"
+                  offsetFromSymbolStart = "40">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "469F1F14-D241-4472-AFCC-EECE980A7895"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TouchBarSimulator/AppDelegate.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "23"
+            endingLineNumber = "23"
+            landmarkName = "applicationShouldTerminateAfterLastWindowClosed(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "83890787-F293-4C17-B77F-FB99097C9CC4"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TouchBarSimulator/TouchBarContextMenu.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
+            landmarkName = "toggleAutoLaunch(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FCA9F948-D31A-4C91-91E1-BD0FEA3AA645"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TouchBarSimulator/TouchBarWindow.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "384"
+            endingLineNumber = "384"
+            landmarkName = "setUp()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "FCA9F948-D31A-4C91-91E1-BD0FEA3AA645 - 4f9aad9ce33f427a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "static TouchBarSimulator.TouchBarWindow.setUp() -&gt; ()"
+                  moduleName = "TouchBarSimulator"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ueharayou/Projects.localized/TouchBarSimulator/TouchBarSimulator/TouchBarWindow.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "384"
+                  endingLineNumber = "384"
+                  offsetFromSymbolStart = "720">
+               </Location>
+               <Location
+                  uuid = "FCA9F948-D31A-4C91-91E1-BD0FEA3AA645 - 4f9aad9ce33f427a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "static TouchBarSimulator.TouchBarWindow.setUp() -&gt; ()"
+                  moduleName = "TouchBarSimulator"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ueharayou/Projects.localized/TouchBarSimulator/TouchBarSimulator/TouchBarWindow.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "384"
+                  endingLineNumber = "384"
+                  offsetFromSymbolStart = "800">
                </Location>
             </Locations>
          </BreakpointContent>

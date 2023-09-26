@@ -35,39 +35,49 @@ extension NSWindow {
             return frame.origin
         }
 
-        let visibleFrame = screen.visibleFrame
+        let screenVisibleFrame = screen.visibleFrame
+        let screenFullFrame = screen.frame
 
         let x: Double
         let y: Double
         switch xPositioning {
         case .leftOut:
-            x = screen.frame.minX - frame.width - 1
+            x = screenFullFrame.minX - frame.width - 1
         case .left:
-            x = visibleFrame.minX
+            x = screenVisibleFrame.minX
         case .center:
-            x = visibleFrame.midX - frame.width / 2
+            // Fix: if new frame is contained in screenVisibleFrame (in X axie), prioritize alignment with screenFullFrame.
+            // This fixes slight mis-alignment with screen center if the dock is placed on the left/right.
+            if screenFullFrame.midX - frame.width >= screenVisibleFrame.minX
+                && screenFullFrame.midX + frame.width <= screenVisibleFrame.maxX {
+                x = screenFullFrame.midX - frame.width / 2
+            }
+            else {
+                x = screenVisibleFrame.midX - frame.width / 2
+            }
         case .right:
-            x = visibleFrame.maxX - frame.width
+            x = screenVisibleFrame.maxX - frame.width
         case .rightOut:
-            x = screen.frame.maxX + 1
+            x = screenFullFrame.maxX + 1
         case .retained:
             x = frame.origin.x
         }
         switch yPositioning {
         case .topOut:
-            y = screen.frame.maxY + 1
+            y = screenFullFrame.maxY + 1
         case .top:
-            // Defect fix: Keep docked windows below menubar area.
+            // Fix: Keep docked windows below menubar area.
             // Previously, the window would obstruct menubar clicks when the menubar was set to auto-hide.
             // Now, the window stays below that area.
             let menubarThickness = NSStatusBar.system.thickness
-            y = min(visibleFrame.maxY - frame.height, screen.frame.maxY - menubarThickness - frame.height)
+            y = min(screenVisibleFrame.maxY - frame.height, screenFullFrame.maxY - menubarThickness - frame.height)
         case .center:
-            y = visibleFrame.midY - frame.height / 2
+            y = screenVisibleFrame.midY - frame.height / 2
         case .bottom:
-            y = visibleFrame.minY
+            // Fix: conflicts when customizing control strip (+1px for system behavior)
+            y = screenVisibleFrame.minY + 1
         case .bottomOut:
-            y = screen.frame.minY - frame.height - 1
+            y = screenFullFrame.minY - frame.height - 1
         case .retained:
             y = frame.origin.y
         }

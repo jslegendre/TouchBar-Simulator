@@ -8,40 +8,53 @@
 import AppKit
 import Defaults
 
-final class TouchBarWindow: NSPanel {
+final class TouchBarWindow: NSPanel, NSWindowDelegate {
+    
+    private var isClosed = false
+    func windowWillClose(_ notification: Notification) {
+        isClosed = true
+    }
+    
     enum Docking: String, Codable {
         case floating
         case dockedToTop
         case dockedToBottom
     }
-    private var docking: Docking = .floating {
+    private var docking: Docking = Defaults[.windowDocking] {
         didSet {
             switch (oldValue, docking) {
             case (_, .floating):
                 detectionTimeout = Date.distantFuture
-                hiding = false
                 addTitle()
                 moveWithAnimation(destination: destinationFrame(docking, hiding))
                 fadeWithAnimation(destination: 1.0)
-            case (_, .dockedToTop), (_, .dockedToBottom):
+            case (.floating, .dockedToTop), (.floating, .dockedToBottom):
+                Defaults[.lastFloatingPosition] = frame.origin
+                fallthrough
+            case (_, _):
                 removeTitle()
                 moveWithAnimation(destination: destinationFrame(docking, hiding))
                 detectionTimeout = Date() + TimeInterval(1.5)
+                break
             }
+            Defaults[.windowDocking] = docking
         }
     }
     
     private var hiding: Bool = false {
         didSet {
             switch (docking, hiding) {
-            case (.floating, _):
+            case (.floating, _) where hiding == true:
+                hiding = false
                 break
-            case (_, true):
+            case (_, true) where oldValue != hiding:
                 moveWithAnimation(destination: destinationFrame(docking, hiding))
                 fadeWithAnimation(destination: 0.0)
-            case (_, false):
+            case (_, false) where oldValue != hiding:
                 moveWithAnimation(destination: destinationFrame(docking, hiding))
                 fadeWithAnimation(destination: 1.0)
+            case (_, _):
+                break
             }
         }
     }
@@ -56,9 +69,10 @@ final class TouchBarWindow: NSPanel {
         guard let toolbarView = toolbarView else {
             return
         }
+
         let buttonUp = NSButton()
         if #available(macOS 11, *) {
-            buttonUp.image = NSImage(systemSymbolName: "menubar.arrow.up.rectangle", accessibilityDescription: "Dock Top.")
+            buttonUp.image = NSImage(systemSymbolName: "menubar.arrow.up.rectangle", accessibilityDescription: "Dock touch bar simulator to the top of the screen.")
         }
         else {
             buttonUp.image = NSImage(named: "DockTop")
@@ -66,13 +80,14 @@ final class TouchBarWindow: NSPanel {
         buttonUp.imageScaling = .scaleProportionallyDown
         buttonUp.isBordered = false
         buttonUp.bezelStyle = .shadowlessSquare
-        buttonUp.frame = CGRect(x: toolbarView.frame.width - 38, y: 4, width: 16, height: 11)
+        buttonUp.frame = CGRect(x: toolbarView.frame.width - 57, y: 4, width: 16, height: 11)
+        buttonUp.autoresizingMask.insert(NSView.AutoresizingMask.minXMargin)
         buttonUp.action = #selector(TouchBarWindow.dockUpPressed)
         toolbarView.addSubview(buttonUp)
         
         let buttonDown = NSButton()
         if #available(macOS 11, *) {
-            buttonDown.image = NSImage(systemSymbolName: "dock.arrow.down.rectangle", accessibilityDescription: "Dock down.")
+            buttonDown.image = NSImage(systemSymbolName: "dock.arrow.down.rectangle", accessibilityDescription: "Dock touch bar simulator to the bottom of the screen.")
         }
         else {
             buttonDown.image = NSImage(named: "DockDown")
@@ -80,9 +95,48 @@ final class TouchBarWindow: NSPanel {
         buttonDown.imageScaling = .scaleProportionallyDown
         buttonDown.isBordered = false
         buttonDown.bezelStyle = .shadowlessSquare
-        buttonDown.frame = CGRect(x: toolbarView.frame.width - 19, y: 4, width: 16, height: 11)
+        buttonDown.frame = CGRect(x: toolbarView.frame.width - 38, y: 4, width: 16, height: 11)
+        buttonDown.autoresizingMask.insert(NSView.AutoresizingMask.minXMargin)
         buttonDown.action = #selector(TouchBarWindow.dockDownPressed)
         toolbarView.addSubview(buttonDown)
+        
+        let buttonSettings = NSButton()
+        if #available(macOS 11, *) {
+            buttonSettings.image = NSImage(systemSymbolName: "gear", accessibilityDescription: "Touch bar simulator Settings.")
+        }
+        else {
+            buttonSettings.image = NSImage(named: "Settings")
+        }
+        buttonSettings.imageScaling = .scaleProportionallyDown
+        buttonSettings.isBordered = false
+        buttonSettings.bezelStyle = .shadowlessSquare
+        buttonSettings.frame = CGRect(x: toolbarView.frame.width - 19, y: 4, width: 16, height: 11)
+        buttonSettings.autoresizingMask.insert(NSView.AutoresizingMask.minXMargin)
+        buttonSettings.action = #selector(TouchBarWindow.settingsPressed)
+        toolbarView.addSubview(buttonSettings)
+        
+        let constraintsArray = [
+            NSLayoutConstraint.constraints(withVisualFormat: "H:[buttonUp]-3-[buttonDown]-3-[buttonSettings]", metrics: nil, views: ["buttonUp": buttonUp, "buttonDown": buttonDown, "buttonSettings": buttonSettings]),
+            ]
+            .reduce([], +)
+        toolbarView.addConstraints(constraintsArray)
+        NSLayoutConstraint.activate(constraintsArray)
+        //toolbarView.layoutSubtreeIfNeeded()
+        //toolbarView.updateLayer()
+        toolbarView.updateConstraints()
+        toolbarView.updateConstraintsForSubtreeIfNeeded()
+        //NSLog("\(toolbarView.subviews.map({($0, $0.frame, $0.constraints)}))")
+    }
+    private func addViewSideBar() {
+        contentView = TouchBarViewFactory.generate(standalone: true) {
+            [weak self] button in
+            self?.dockReleasePressed(button)
+            return
+        }
+    }
+    
+    private func removeViewSideBar() {
+        contentView = TouchBarViewFactory.generate(standalone: false)
     }
     
     @objc func dockDownPressed(_: NSButton) {
@@ -93,16 +147,37 @@ final class TouchBarWindow: NSPanel {
         docking = .dockedToTop
     }
     
+    @objc func dockReleasePressed(_ sender: NSButton) {
+        if let event = NSApp.currentEvent {
+            
+            let isOptionKeyPressed = event.modifierFlags.contains(NSEvent.ModifierFlags.option)
+            //let isControlKeyPressed = event.modifierFlags.contains(NSEvent.ModifierFlags.control)
+            
+            switch (event.type, isOptionKeyPressed) {
+            case (NSEvent.EventType.leftMouseUp, true):
+                close()
+            default:
+                docking = .floating
+            }
+        }
+    }
+    
+    @objc func settingsPressed(_ sender: NSButton) {
+        TouchBarContextMenu.showContextMenu(sender)
+    }
+    
     private func addTitle() {
         if !styleMask.contains(.titled) {
             styleMask.insert(.titled)
             addToolBar()
+            removeViewSideBar()
         }
     }
     private func removeTitle() {
         if styleMask.contains(.titled) {
             styleMask.remove(.titled)
         }
+        addViewSideBar()
     }
     
     private var detectionTimeout = Date() + TimeInterval(1.5)
@@ -151,13 +226,13 @@ final class TouchBarWindow: NSPanel {
         return detectionRect.contains(NSEvent.mouseLocation)
     }
     private func handleAutoHide() {
-        switch docking {
-        case .floating:
+        switch (docking, hiding) {
+        case (.floating, _):
             break
-        case .dockedToTop, .dockedToBottom:
+        case (.dockedToTop, _), (.dockedToBottom, _):
             if isMouseDetected {
-                detectionTimeout = Date() + TimeInterval(1.5)
                 hiding = false
+                detectionTimeout = Date() + TimeInterval(1.5)
             }
             else if Date() >= detectionTimeout {
                 hiding = true
@@ -168,7 +243,13 @@ final class TouchBarWindow: NSPanel {
     private func destinationOrigin(_ forDocking: Docking, _ forHiding: Bool) -> CGPoint {
         switch(forDocking, forHiding) {
         case (.floating, _):
-            return Defaults[.lastFloatingPosition] ?? alignedOrigin(.center, .center)
+            if let screen = NSScreen.main, let savedValue = Defaults[.lastFloatingPosition], screen.visibleFrame.contains(savedValue) {
+                return savedValue
+            }
+            else {
+                return alignedOrigin(.center, .center)
+            }
+            //return alignedOrigin(.center, .center)
         case (.dockedToTop, false):
             return alignedOrigin(.center, .top)
         case (.dockedToBottom, false):
@@ -184,82 +265,73 @@ final class TouchBarWindow: NSPanel {
     }
     
     private func moveWithAnimation(destination endFrame: CGRect) {
-        //TouchBarWindowAnimation.moveWithAnimation(endFrame)
-        windowMoveAnimation.animate = {(startFrame, endFrame) in { [unowned self] (currentValue: Float) in
-            if currentValue == 1.0 {
-                self.setFrame(endFrame, display: true)
-            }
-            else {
-                // Calc frame
-                // Step 0: Get parameter `t`
-                let t = CGFloat(currentValue)
-                
-                // Step 1: Scaling transform
-                let dWidth = endFrame.size.width / startFrame.size.width - 1
-                let dHeight = endFrame.size.width / startFrame.size.width - 1
-                
-                let scalingTransform = CGAffineTransform.identity
+        windowMoveAnimation.animation = {(startFrame, endFrame) in
+            let dWidth = endFrame.size.width / startFrame.size.width - 1
+            let dHeight = endFrame.size.width / startFrame.size.width - 1
+            let centerX = startFrame.midX
+            let centerY = startFrame.midY
+            let dX = endFrame.midX - startFrame.midX
+            let dY = endFrame.midY - startFrame.midY
+            
+            let scaleTranslateTransform = {(t: CGFloat) in
+                return CGAffineTransform.identity
+                // Step 1: Scaling transform with mid point as origin
+                    .translatedBy(x: -centerX, y: -centerY)
                     .scaledBy(x: dWidth * t + 1, y: dHeight * t + 1)
-                
-                let scaledFrame = startFrame.applying(scalingTransform)
-                
+                    .translatedBy(x: centerX, y: centerY)
                 // Step 2: Translating transform
-                let dx = endFrame.midX - scaledFrame.midX
-                let dy = endFrame.midY - scaledFrame.midY
-                
-                let translatingTransform = CGAffineTransform.identity
-                    .translatedBy(x: dx * t, y: dy * t)
-                
-                let translatedScaledFrame = scaledFrame.applying(translatingTransform)
-                
-                // Step 3: Apply transform
-                self.setFrame(translatedScaledFrame, display: true)
-                /*
-                NSLog("-> \(translatedScaledFrame)")
-                if currentValue == 1.0 && endFrame != translatedScaledFrame {
-                    self.setFrame(endFrame, display: true)
-                    NSLog("-X> \(endFrame)")
-                }
-                else if currentValue == 1.0 && endFrame == translatedScaledFrame {
-                    NSLog("OK")
-                }
-                 */
+                    .translatedBy(x: dX * t, y: dY * t)
             }
-        }}(frame, endFrame)
-       
+            
+            return { [unowned self] (currentValue: Float) in
+                if currentValue == 1.0 {
+                    self.setFrame(endFrame, display: true)
+                }
+                else {
+                    let t = CGFloat(currentValue)
+                    
+                    let currentTransform = scaleTranslateTransform(t)
+                    let currentFrame = startFrame.applying(currentTransform)
+                    self.setFrame(currentFrame, display: true)
+                    
+                    /*
+                    NSLog("\(currentValue) -> \(currentFrame)")
+                    if currentValue == 1.0 && endFrame != currentFrame {
+                        self.setFrame(endFrame, display: true)
+                        NSLog("-X> \(endFrame)")
+                    }
+                    else if currentValue == 1.0 && endFrame == currentFrame {
+                        NSLog("OK")
+                    }
+                    */
+                }
+            }}(frame, endFrame)
         windowMoveAnimation.start()
     }
     private func fadeWithAnimation(destination endValue: CGFloat) {
-        //TouchBarWindowAnimation.moveWithAnimation(endFrame)
-        windowFadeAnimation.animate = {(startValue, endValue) in { [unowned self] (currentValue: Float) in
-            if currentValue == 1.0 {
-                self.alphaValue = endValue
-            }
-            else {
-                // Calc frame
-                // Step 0: Get parameter `t`
-                let t = CGFloat(currentValue)
-                
-                // Step 1: Scaling transform
-                let dAlphaValue = endValue - startValue
-                
-                let scaledValue = startValue + dAlphaValue * t
-                
-                // Step 2: Apply transform
-                self.alphaValue = scaledValue
-                /*
-                NSLog("-> \(scaledValue)")
-                if currentValue == 1.0 && endValue != scaledValue {
+        windowFadeAnimation.animation = {(startValue, endValue) in
+            let dAlphaValue = endValue - startValue
+            let scaledValue = {(t: CGFloat) in return startValue + dAlphaValue * t}
+            return { [unowned self] (currentValue: Float) in
+                if currentValue == 1.0 {
                     self.alphaValue = endValue
-                    NSLog("-X> \(endValue)")
                 }
-                else if currentValue == 1.0 && endValue == scaledValue {
-                    NSLog("OK")
+                else {
+                    let t = CGFloat(currentValue)
+                    self.alphaValue = scaledValue(t)
+                    /*
+                     NSLog("-> \(scaledValue)")
+                     if currentValue == 1.0 && endValue != scaledValue {
+                     self.alphaValue = endValue
+                     NSLog("-X> \(endValue)")
+                     }
+                     else if currentValue == 1.0 && endValue == scaledValue {
+                     NSLog("OK")
+                     }
+                     */
                 }
-                 */
-            }
-        }}(alphaValue, endValue)
-       
+            }}(alphaValue, endValue)
+        
         windowFadeAnimation.start()
     }
     
@@ -272,34 +344,48 @@ final class TouchBarWindow: NSPanel {
                 .nonactivatingPanel,
                 .hudWindow,
                 .resizable,
-                .utilityWindow
+                .utilityWindow,
             ],
             backing: .buffered,
             defer: false
         )
+        delegate = self
+        isReleasedWhenClosed = false
         title = "Touch Bar"
         level = .assistiveTechHigh
+        backgroundColor = .clear
+        isOpaque = false
         //TODO: if implementing _setPreventsActivation(true)
         isRestorable = true
         hidesOnDeactivate = false
         worksWhenModal = true
         acceptsMouseMovedEvents = true
         isMovableByWindowBackground = false
-        contentAspectRatio = NSMakeSize(1014, 40)
-        contentView = TouchBarView.buildView()
+        //contentAspectRatio = NSMakeSize(1014, 40)
+        contentView = TouchBarViewFactory.generate()//TouchBarView.buildView(standalone: true)
+        addToolBar()
     }
     
     private static let instance = TouchBarWindow()
     
+    public static var isClosed: Bool {
+        return instance.isClosed
+    }
+    
     public static func setUp() {
         // setup frame
         let frameDiscriptor = UserDefaults.standard.object(forKey: "savedWindowFrame")
+        let previousDocking = Defaults[.windowDocking]
         if let discriptor = frameDiscriptor {
             instance.setFrame(from: discriptor as! NSWindow.PersistableFrameDescriptor)
         }
         
-        instance.addToolBar()
+        if previousDocking == .dockedToTop || previousDocking == .dockedToBottom {
+            instance.setFrame(instance.destinationFrame(previousDocking, false), display: true)
+        }
 
+        instance.docking = previousDocking
+        
         // setup observerTimer
         RunLoop.main.add(Timer(timeInterval: 0.3, repeats: true) { timer in
             instance.handleAutoHide()
@@ -308,13 +394,17 @@ final class TouchBarWindow: NSPanel {
     }
     
     public static func finishUp() {
-        UserDefaults.standard.setValue(instance.frameDescriptor, forKey: "savedWindowFrame")
-        UserDefaults.standard.synchronize()
+        if instance.docking == .floating {
+            Defaults[.lastFloatingPosition] = instance.frame.origin
+            UserDefaults.standard.setValue(instance.frameDescriptor, forKey: "savedWindowFrame")
+            UserDefaults.standard.synchronize()
+        }
+        
         let remoteViewController = instance.contentViewController as? NSRemoteViewController
         remoteViewController?.disconnect()
     }
     
-    public static var showOnAllDesktops = false {
+    public static var showOnAllDesktops = true {
         didSet {
             if showOnAllDesktops {
                 instance.collectionBehavior = .canJoinAllSpaces
@@ -331,186 +421,3 @@ final class TouchBarWindow: NSPanel {
     }
     
 }
-
-class TouchBarToolBarView: NSView {
-    
-}
-
-class TouchBarView: NSView {
-    
-    override func draw(_ dirtyRect: NSRect) {
-        //NSBezierPath(roundedRect: dirtyRect, xRadius: 0.7, yRadius: 0.7).addClip()
-        //dirtyRect.fill(using: .clear);
-        super.draw(dirtyRect)
-    }
-    
-    static func buildView() -> TouchBarView {
-        let contentView = TouchBarView()
-        contentView.wantsLayer = true
-        contentView.layer?.backgroundColor = NSColor.clear.cgColor
-        
-        let remoteView = NSRemoteView(frame: CGRectMake(0, 0, 1004, 30)) // 1004, 30
-        remoteView.setSynchronizesImplicitAnimations(false)
-        remoteView.serviceName = "moe.ueharayou.TouchBarSimulatorService"
-        remoteView.serviceSubclassName = "TouchBarSimulatorService"
-        remoteView.advance(toRunPhaseIfNeeded: {(error) in
-            //DispatchQueue.main.async {
-                remoteView.translatesAutoresizingMaskIntoConstraints = false
-                remoteView.setShouldMaskToBounds(false)
-                remoteView.layer?.allowsEdgeAntialiasing = true
-                
-                contentView.addSubview(remoteView)
-                
-                let constraintsArray = [NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[remoteView]-5-|", metrics: nil, views: ["remoteView": remoteView]),
-                                        NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[remoteView]-5-|", metrics: nil, views: ["remoteView": remoteView])]
-                    .reduce([], +)
-                contentView.addConstraints(constraintsArray)
-                NSLayoutConstraint.activate(constraintsArray)
-                contentView.layoutSubtreeIfNeeded()
-            //}
-            
-            return
-        })
-        
-        return contentView
-    }
-}
-
-/*
- func reposition(window: NSWindow, padding: Double) { // padding: decided by animation
- switch self {
- case .floating:
- if let prevPosition = Defaults[.lastFloatingPosition] {
- window.setFrameOrigin(prevPosition)
- }
- case .dockedToTop:
- window.moveTo(x: .center, y: .top)
- window.setFrameOrigin(CGPoint(x: window.frame.origin.x, y: window.frame.origin.y - padding))
- case .dockedToBottom:
- window.moveTo(x: .center, y: .bottom)
- window.setFrameOrigin(CGPoint(x: window.frame.origin.x, y: window.frame.origin.y + padding))
- }
- }
- */
-
-/*
-final class TouchBarWindowAnimation: NSAnimation { // Outruled: NSAnimationDelegate
-    override var currentProgress: NSAnimation.Progress {
-        didSet {
-            super.currentProgress = currentProgress
-            
-            if isAnimating {
-                // shortcutting currentProgress == 1: end of animation
-                if currentProgress == 1.0 {
-                    TouchBarWindow.instance.setFrame(endFrame, display: true)
-                }
-                else {
-                    // Calc frame
-                    // Step 0: Get parameter `t`
-                    let t = CGFloat(currentValue)
-                    
-                    // Step 1: Scaling transform
-                    let dWidth = endFrame.size.width / startFrame.size.width - 1
-                    let dHeight = endFrame.size.width / startFrame.size.width - 1
-
-                    let scalingTransform = CGAffineTransform.identity
-                        .scaledBy(x: dWidth * t + 1, y: dHeight * t + 1)
-                        
-                    let scaledFrame = startFrame.applying(scalingTransform)
-                    
-                    // Step 2: Translating transform
-                    let dx = endFrame.midX - scaledFrame.midX
-                    let dy = endFrame.midY - scaledFrame.midY
-                    
-                    let translatingTransform = CGAffineTransform.identity
-                        .translatedBy(x: dx * t, y: dy * t)
-                    
-                    let translatedScaledFrame = scaledFrame.applying(translatingTransform)
-                    
-                    // Step 3: Apply transform
-                    TouchBarWindow.instance.setFrame(translatedScaledFrame, display: true)
-                }
-            }
-        }
-    }
-
-    private var startFrame = CGRect.zero
-    
-    public var endFrame = CGRect.zero {
-        didSet {
-            // immediately stop (cancel) current animation & reset
-            if isAnimating {
-                stop()
-                currentProgress = 0.0
-            }
-            startFrame = TouchBarWindow.instance.frame
-            start()
-        }
-    }
-    
-    private override init(duration: TimeInterval, animationCurve: NSAnimation.Curve) {
-        super.init(duration: duration, animationCurve: animationCurve)
-    }
-    
-    internal required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-    
-    private static let instance = TouchBarWindowAnimation(duration: 0.5, animationCurve: .easeInOut)
-    
-    public static var duration: TimeInterval {
-        get {
-            return instance.duration
-        }
-        set {
-            instance.duration = newValue
-        }
-    }
-    
-    public static var animationCurve: NSAnimation.Curve {
-        get {
-            return instance.animationCurve
-        }
-        set {
-            instance.animationCurve = newValue
-        }
-    }
-    
-    public static func moveWithAnimation(_ dest: CGRect) {
-        instance.endFrame = dest
-    }
-}
-*/
-
-/*
- // test
- RunLoop.main.add(Timer(timeInterval: 1.0, repeats: true) { timer in
-     let rand = CGFloat(Float.random(in: 0.0...1.0))
-     //let rand2 = CGFloat(Float.random(in: 0.8...1.25))
-     let rand2 = 1.0
-     let visibleFrame = NSScreen.main?.visibleFrame ?? CGRect.zero
-     let newOrigin = CGPoint(x: visibleFrame.width * rand, y: visibleFrame.height * rand)
-     let newFrame = CGRect(origin: newOrigin, size: instance.frame.size.applying(CGAffineTransform(scaleX: rand2, y: rand2)))
-     instance.moveWithAnimation(destination: newFrame)
- }, forMode: .default)
- RunLoop.main.add(Timer(timeInterval: 1.0, repeats: true) { timer in
-     let rand = CGFloat(Float.random(in: 0.0...1.0))
-     instance.fadeWithAnimation(destination: rand)
- }, forMode: .default)
- Timer(timeInterval: 1, repeats: true) { [unowned self] timer in
-     let rand = CGFloat(Int.random(in: 0...3))
-     switch rand {
-     case 0...1:
-         //self.addTitle()
-         self.docking = .floating
-     case 2:
-         //self.removeTitle()
-         self.docking = .dockedToTop
-     case 3:
-         //self.removeTitlebar()
-         self.docking = .dockedToBottom
-     default:
-         break
-     }
- }.fire()
- */

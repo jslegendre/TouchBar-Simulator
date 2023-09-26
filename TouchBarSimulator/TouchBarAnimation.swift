@@ -12,16 +12,16 @@ class TouchBarAnimation: NSAnimation {
         didSet {
             super.currentProgress = currentProgress
             if isAnimating {
-                animate(currentValue)
+                animation(currentValue)
             }
         }
     }
-    public var animate: (Float) -> Void  = {_ in return} {
+    public var animation: (Float) -> Void  = {_ in return} {
         didSet {
             // immediately stop (cancel) current animation & reset
             if isAnimating {
                 stop()
-                NSLog("animation Interrupted: \(currentProgress)")
+                //NSLog("animation Interrupted: \(currentProgress)")
                 currentProgress = 0.0
             }
             //start()
