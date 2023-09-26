@@ -151,12 +151,14 @@ final class TouchBarWindow: NSPanel, NSWindowDelegate {
         if let event = NSApp.currentEvent {
             
             let isOptionKeyPressed = event.modifierFlags.contains(NSEvent.ModifierFlags.option)
-            //let isControlKeyPressed = event.modifierFlags.contains(NSEvent.ModifierFlags.control)
+            let isComandKeyPressed = event.modifierFlags.contains(NSEvent.ModifierFlags.command)
             
-            switch (event.type, isOptionKeyPressed) {
-            case (NSEvent.EventType.leftMouseUp, true):
+            switch (isComandKeyPressed, isOptionKeyPressed) {
+            case (true, _):
+                TouchBarContextMenu.showContextMenu(sender)
+            case (false, true):
                 close()
-            default:
+            case (false, false):
                 docking = .floating
             }
         }

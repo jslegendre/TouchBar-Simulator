@@ -96,6 +96,15 @@ class TouchBarViewFactory {
             }
         }()
         
+        let settingsImage = {
+            if #available(macOS 11, *) {
+                return NSImage(systemSymbolName: "gear", accessibilityDescription: "Undock touch bar simulator.") // Alternative: "rhombus.fill" "chevron.compact.left"
+            }
+            else {
+                return NSImage(named: "Settings")
+            }
+        }()
+        
         let buttonRelease = NSButton()
         buttonRelease.image = escapeImage
         buttonRelease.imageScaling = .scaleProportionallyDown
@@ -110,14 +119,16 @@ class TouchBarViewFactory {
         let keyListenHandler: (NSEvent) -> Void = {
             event in
             let isOptionKeyPressed = event.modifierFlags.contains(NSEvent.ModifierFlags.option)
+            let isCommandKeyPressed = event.modifierFlags.contains(NSEvent.ModifierFlags.command)
             
-            if isOptionKeyPressed {
+            switch (isCommandKeyPressed, isOptionKeyPressed) {
+            case (true, _):
+                buttonRelease.image = settingsImage
+            case (false, true):
                 buttonRelease.image = closeImage
-            }
-            else {
+            case (false, false):
                 buttonRelease.image = escapeImage
             }
-            
             return
         }
         
