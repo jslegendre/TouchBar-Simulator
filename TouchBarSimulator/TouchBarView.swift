@@ -10,10 +10,10 @@ import Foundation
 class TouchBarViewFactory {
     
     class TouchBarView: NSView {
-        public var dockReleaseDelegate: ((_: NSButton) -> Void)?
+        public var dockSideButtonDelegate: ((_: NSButton) -> Void)?
         
-        @objc public func dockReleasePressed(_ button: NSButton) {
-            dockReleaseDelegate?(button)
+        @objc public func sideButtonPressed(_ button: NSButton) {
+            dockSideButtonDelegate?(button)
         }
     }
     
@@ -31,8 +31,8 @@ class TouchBarViewFactory {
         
         let remoteView = NSRemoteView(frame: CGRectMake(0, 0, 1004, 30)) // 1004, 30
         remoteView.setSynchronizesImplicitAnimations(false)
-        remoteView.serviceName = "moe.ueharayou.TouchBarSimulatorService"
-        remoteView.serviceSubclassName = "TouchBarSimulatorService"
+        remoteView.serviceName = Globals.serviceBundleId
+        remoteView.serviceSubclassName = Globals.serviceSubClassName
         remoteView.translatesAutoresizingMaskIntoConstraints = false
         remoteView.setShouldMaskToBounds(false)
         remoteView.layer?.allowsEdgeAntialiasing = true
@@ -80,41 +80,47 @@ class TouchBarViewFactory {
         
         let escapeImage = {
             if #available(macOS 11, *) {
-                return NSImage(systemSymbolName: "escape", accessibilityDescription: "Undock touch bar simulator.") // Alternative: "rhombus.fill" "chevron.compact.left"
+                return NSImage(systemSymbolName: "escape", accessibilityDescription: "Undock touch bar simulator.".localized) // Alternative: "rhombus.fill" "chevron.compact.left"
             }
             else {
-                return NSImage(named: "Escape")
+                let image = NSImage(named: "Escape")
+                image?.accessibilityDescription = "Undock touch bar simulator.".localized
+                return image
             }
         }()
         
         let closeImage = {
             if #available(macOS 11, *) {
-                return NSImage(systemSymbolName: "xmark.square.fill", accessibilityDescription: "Undock touch bar simulator.") // Alternative: "rhombus.fill" "chevron.compact.left"
+                return NSImage(systemSymbolName: "xmark.square.fill", accessibilityDescription: "Close touch bar simulator.".localized) // Alternative: "rhombus.fill" "chevron.compact.left"
             }
             else {
-                return NSImage(named: "Xmark")
+                let image = NSImage(named: "Xmark")
+                image?.accessibilityDescription = "Close touch bar simulator.".localized
+                return image
             }
         }()
         
         let settingsImage = {
             if #available(macOS 11, *) {
-                return NSImage(systemSymbolName: "gear", accessibilityDescription: "Undock touch bar simulator.") // Alternative: "rhombus.fill" "chevron.compact.left"
+                return NSImage(systemSymbolName: "gear", accessibilityDescription: "Touch bar simulator settings.".localized) // Alternative: "rhombus.fill" "chevron.compact.left"
             }
             else {
-                return NSImage(named: "Settings")
+                let image = NSImage(named: "Settings")
+                image?.accessibilityDescription = "Touch bar simulator settings.".localized
+                return image
             }
         }()
         
-        let buttonRelease = NSButton()
-        buttonRelease.image = escapeImage
-        buttonRelease.imageScaling = .scaleProportionallyDown
-        buttonRelease.isBordered = false
-        buttonRelease.bezelStyle = .shadowlessSquare
-        buttonRelease.frame = CGRect(x: 0, y: 0, width: 16, height: 11)
-        buttonRelease.autoresizingMask = [.minXMargin, .minYMargin, .maxYMargin]
-        buttonRelease.translatesAutoresizingMaskIntoConstraints = false
-        buttonRelease.action = #selector(TouchBarView.dockReleasePressed)
-        sideBarView.addSubview(buttonRelease)
+        let sideButton = NSButton()
+        sideButton.image = escapeImage
+        sideButton.imageScaling = .scaleProportionallyDown
+        sideButton.isBordered = false
+        sideButton.bezelStyle = .shadowlessSquare
+        sideButton.frame = CGRect(x: 0, y: 0, width: 16, height: 11)
+        sideButton.autoresizingMask = [.minXMargin, .minYMargin, .maxYMargin]
+        sideButton.translatesAutoresizingMaskIntoConstraints = false
+        sideButton.action = #selector(TouchBarView.sideButtonPressed)
+        sideBarView.addSubview(sideButton)
         
         let keyListenHandler: (NSEvent) -> Void = {
             event in
@@ -123,11 +129,11 @@ class TouchBarViewFactory {
             
             switch (isCommandKeyPressed, isOptionKeyPressed) {
             case (true, _):
-                buttonRelease.image = settingsImage
+                sideButton.image = settingsImage
             case (false, true):
-                buttonRelease.image = closeImage
+                sideButton.image = closeImage
             case (false, false):
-                buttonRelease.image = escapeImage
+                sideButton.image = escapeImage
             }
             return
         }
@@ -135,12 +141,12 @@ class TouchBarViewFactory {
         NSEvent.addGlobalMonitorForEvents(matching: .flagsChanged) {event in keyListenHandler(event)}
         NSEvent.addLocalMonitorForEvents(matching: .flagsChanged) {event in keyListenHandler(event); return event}
         
-        let targetRegistration = {(target: TouchBarView) -> Void in buttonRelease.target = target} // target is a weak reference
+        let targetRegistration = {(target: TouchBarView) -> Void in sideButton.target = target} // target is a weak reference
         
         let constraintsArray =
-        [NSLayoutConstraint.constraints(withVisualFormat: "H:[buttonRelease(16)]", metrics: nil, views: ["buttonRelease": buttonRelease]),
-         NSLayoutConstraint.constraints(withVisualFormat: "H:|-3-[buttonRelease]-3-|", metrics: nil, views: ["buttonRelease": buttonRelease]),
-         NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[buttonRelease]-5-|", metrics: nil, views: ["buttonRelease": buttonRelease])]
+        [NSLayoutConstraint.constraints(withVisualFormat: "H:[buttonRelease(16)]", metrics: nil, views: ["buttonRelease": sideButton]),
+         NSLayoutConstraint.constraints(withVisualFormat: "H:|-3-[buttonRelease]-3-|", metrics: nil, views: ["buttonRelease": sideButton]),
+         NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[buttonRelease]-5-|", metrics: nil, views: ["buttonRelease": sideButton])]
             .reduce([], +)
         
         sideBarView.addConstraints(constraintsArray)
@@ -156,7 +162,7 @@ class TouchBarViewFactory {
         touchBarView.autoresizingMask = [.height, .width]
         touchBarView.wantsLayer = true
         touchBarView.layerUsesCoreImageFilters = true
-        touchBarView.dockReleaseDelegate = delegateFunc
+        touchBarView.dockSideButtonDelegate = delegateFunc
         //touchBarView.layer?.backgroundColor = NSColor(red: 1.0, green: 0.1, blue: 0.1, alpha: 1.0).cgColor
         
         if standalone {

@@ -20,20 +20,20 @@ class TouchBarContextMenu {
     private static let instance = TouchBarContextMenu()
     private let contextMenu: NSMenu
     private let autoLaunchToggle: NSMenuItem
-    private let quitButton: NSMenuItem
-    private let seperator1 = NSMenuItem.separator()
+    //private let quitButton: NSMenuItem
+    //private let seperator1 = NSMenuItem.separator()
     private init() {
         let menu = NSMenu()
         
         let nEditToggle = NSMenuItem(title: "Launch At Login".localized, action: #selector(toggleAutoLaunch), keyEquivalent: "")
         nEditToggle.tag = 0
         
-        let nQuitButton = NSMenuItem(title: "Quit".localized, action: #selector(NSApplication.terminate(_:)), keyEquivalent: "")
-        nQuitButton.tag = 1
+        //let nQuitButton = NSMenuItem(title: "Quit".localized, action: #selector(NSApplication.terminate(_:)), keyEquivalent: "")
+        //nQuitButton.tag = 1
         
         contextMenu = menu
         autoLaunchToggle = nEditToggle
-        quitButton = nQuitButton
+        //quitButton = nQuitButton
     }
     
     private func updateMenu() {
@@ -57,7 +57,7 @@ class TouchBarContextMenu {
     }
     
     @objc func toggleAutoLaunch(_ sender: NSButton) {
-        //Defaults[.launchAtLogin] = !Defaults[.launchAtLogin]
+        //Defaults[.launchAtLogin] = !Defaults[.launchAtLogin] // Don't need to store autoLaunch option elsewhere
         LaunchAtLogin.isEnabled = !LaunchAtLogin.isEnabled
     }
 

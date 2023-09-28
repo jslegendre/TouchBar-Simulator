@@ -24,19 +24,7 @@ typedef struct {
 @implementation TouchBarSimulatorStreamView
 
 - (void)mouseEvent:(NSEvent *)event {
-    /*
-    NSPoint windowLocation = event.locationInWindow;
-    //if (self.frame.size.width != 1004) {
-        CGFloat x = windowLocation.x * (1085 / self.frame.size.width);
-        CGFloat y = windowLocation.y * (30 / self.frame.size.height);
-    
-        windowLocation.x = x;
-        windowLocation.y = y;
-    //}
-    NSPoint location = [self convertPoint:windowLocation fromView:nil];
-    NSLog(@"location:%f, %f, WIN: %f, %f, FRAME: %f.", location.x, location.y, windowLocation.x, windowLocation.y, self.frame.size.width);
-     */
-    // FIXME: Precision
+
     
     NSPoint windowLocation = event.locationInWindow;
     NSPoint viewLocation = [self convertPoint:windowLocation fromView:self];

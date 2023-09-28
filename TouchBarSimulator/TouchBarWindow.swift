@@ -24,10 +24,10 @@ final class TouchBarWindow: NSPanel, NSWindowDelegate {
         didSet {
             switch (oldValue, docking) {
             case (_, .floating):
-                detectionTimeout = Date.distantFuture
                 addTitle()
                 moveWithAnimation(destination: destinationFrame(docking, hiding))
                 fadeWithAnimation(destination: 1.0)
+                detectionTimeout = Date.distantFuture
             case (.floating, .dockedToTop), (.floating, .dockedToBottom):
                 Defaults[.lastFloatingPosition] = frame.origin
                 fallthrough
@@ -74,8 +74,11 @@ final class TouchBarWindow: NSPanel, NSWindowDelegate {
         if #available(macOS 11, *) {
             buttonUp.image = NSImage(systemSymbolName: "menubar.arrow.up.rectangle", accessibilityDescription: "Dock touch bar simulator to the top of the screen.")
         }
+        
         else {
-            buttonUp.image = NSImage(named: "DockTop")
+            let image = NSImage(named: "DockUp")
+            image?.accessibilityDescription = "Dock touch bar simulator to the top of the screen.".localized
+            buttonUp.image = image
         }
         buttonUp.imageScaling = .scaleProportionallyDown
         buttonUp.isBordered = false
@@ -90,7 +93,9 @@ final class TouchBarWindow: NSPanel, NSWindowDelegate {
             buttonDown.image = NSImage(systemSymbolName: "dock.arrow.down.rectangle", accessibilityDescription: "Dock touch bar simulator to the bottom of the screen.")
         }
         else {
-            buttonDown.image = NSImage(named: "DockDown")
+            let image = NSImage(named: "DockDown")
+            image?.accessibilityDescription = "Dock touch bar simulator to the bottom of the screen.".localized
+            buttonDown.image = image
         }
         buttonDown.imageScaling = .scaleProportionallyDown
         buttonDown.isBordered = false
@@ -102,10 +107,12 @@ final class TouchBarWindow: NSPanel, NSWindowDelegate {
         
         let buttonSettings = NSButton()
         if #available(macOS 11, *) {
-            buttonSettings.image = NSImage(systemSymbolName: "gear", accessibilityDescription: "Touch bar simulator Settings.")
+            buttonSettings.image = NSImage(systemSymbolName: "gear", accessibilityDescription: "Touch bar simulator settings.")
         }
         else {
-            buttonSettings.image = NSImage(named: "Settings")
+            let image = NSImage(named: "Settings")
+            image?.accessibilityDescription = "Touch bar simulator settings.".localized
+            buttonSettings.image = image
         }
         buttonSettings.imageScaling = .scaleProportionallyDown
         buttonSettings.isBordered = false
@@ -130,7 +137,7 @@ final class TouchBarWindow: NSPanel, NSWindowDelegate {
     private func addViewSideBar() {
         contentView = TouchBarViewFactory.generate(standalone: true) {
             [weak self] button in
-            self?.dockReleasePressed(button)
+            self?.dockSideButtonPressed(button)
             return
         }
     }
@@ -147,7 +154,7 @@ final class TouchBarWindow: NSPanel, NSWindowDelegate {
         docking = .dockedToTop
     }
     
-    @objc func dockReleasePressed(_ sender: NSButton) {
+    @objc func dockSideButtonPressed(_ sender: NSButton) {
         if let event = NSApp.currentEvent {
             
             let isOptionKeyPressed = event.modifierFlags.contains(NSEvent.ModifierFlags.option)
@@ -295,17 +302,6 @@ final class TouchBarWindow: NSPanel, NSWindowDelegate {
                     let currentTransform = scaleTranslateTransform(t)
                     let currentFrame = startFrame.applying(currentTransform)
                     self.setFrame(currentFrame, display: true)
-                    
-                    /*
-                    NSLog("\(currentValue) -> \(currentFrame)")
-                    if currentValue == 1.0 && endFrame != currentFrame {
-                        self.setFrame(endFrame, display: true)
-                        NSLog("-X> \(endFrame)")
-                    }
-                    else if currentValue == 1.0 && endFrame == currentFrame {
-                        NSLog("OK")
-                    }
-                    */
                 }
             }}(frame, endFrame)
         windowMoveAnimation.start()
@@ -321,16 +317,6 @@ final class TouchBarWindow: NSPanel, NSWindowDelegate {
                 else {
                     let t = CGFloat(currentValue)
                     self.alphaValue = scaledValue(t)
-                    /*
-                     NSLog("-> \(scaledValue)")
-                     if currentValue == 1.0 && endValue != scaledValue {
-                     self.alphaValue = endValue
-                     NSLog("-X> \(endValue)")
-                     }
-                     else if currentValue == 1.0 && endValue == scaledValue {
-                     NSLog("OK")
-                     }
-                     */
                 }
             }}(alphaValue, endValue)
         
@@ -344,7 +330,7 @@ final class TouchBarWindow: NSPanel, NSWindowDelegate {
                 .titled,
                 .closable,
                 .nonactivatingPanel,
-                .hudWindow,
+                .hudWindow, // Setting this flag always renders title bar in darkAqua...
                 .resizable,
                 .utilityWindow,
             ],
@@ -353,18 +339,20 @@ final class TouchBarWindow: NSPanel, NSWindowDelegate {
         )
         delegate = self
         isReleasedWhenClosed = false
-        title = "Touch Bar"
+        title = "Touch Bar".localized
         level = .assistiveTechHigh
         backgroundColor = .clear
         isOpaque = false
-        //TODO: if implementing _setPreventsActivation(true)
         isRestorable = true
         hidesOnDeactivate = false
         worksWhenModal = true
         acceptsMouseMovedEvents = true
         isMovableByWindowBackground = false
-        //contentAspectRatio = NSMakeSize(1014, 40)
-        contentView = TouchBarViewFactory.generate()//TouchBarView.buildView(standalone: true)
+        appearance = NSAppearance(named: NSAppearance.Name.darkAqua) // As `.hudWindow` flag set, we always render the window in darkAqua
+        //contentAspectRatio = NSMakeSize(1014, 40) // Don't need this, set NSRemoteView aspect ratio instead
+        // _setPreventsActivation(true) // Seems not necessary
+        
+        contentView = TouchBarViewFactory.generate()
         addToolBar()
     }
     

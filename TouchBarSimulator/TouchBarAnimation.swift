@@ -24,7 +24,7 @@ class TouchBarAnimation: NSAnimation {
                 //NSLog("animation Interrupted: \(currentProgress)")
                 currentProgress = 0.0
             }
-            //start()
+            //start() // Allow manual triggers
         }
     }
     

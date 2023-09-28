@@ -12,4 +12,6 @@ enum Globals {
     static let appName = "Touch Bar Simulator"
     static let mainAppId = "moe.ueharayou.TouchBarSimulator"
     static let windowAutosaveName = "TouchBarWindow"
+    static let serviceBundleId = "moe.ueharayou.TouchBarSimulatorService"
+    static let serviceSubClassName = "TouchBarSimulatorService"
 }
