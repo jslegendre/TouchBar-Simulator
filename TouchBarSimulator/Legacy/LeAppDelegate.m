@@ -5,10 +5,11 @@
 //  Created by Jeremy on 8/15/20.
 //
 
-#import <ViewBridge/ViewBridge.h>
-#import "AppDelegate.h"
+#import "ViewBridge.h"
+#import "LeAppDelegate.h"
 
 @interface TBSimulatorPanel : NSPanel
+@property (weak) IBOutlet NSApplication *filewoner;
 @end
 
 @implementation TBSimulatorPanel
@@ -23,21 +24,25 @@
 
 @end
 
-@interface AppDelegate ()
+@interface LEAppDelegate ()
 
 @property (strong) IBOutlet NSPanel *window;
+//@property (strong) NSPanel* window;
 @end
 
-@implementation AppDelegate
+@implementation LEAppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-
-    self.window.contentView.layer.backgroundColor = NSColor.clearColor.CGColor;
-
+    self.window = [[NSPanel alloc] init];
+    self.window.contentView = [[NSView alloc] init];
+    //self.window.styleMask &= ~(NSWindowStyleMaskTitled | NSWindowStyleMaskClosable);
+    self.window.styleMask = 0b10011011;
+    
     self.window.contentAspectRatio = NSMakeSize(1014, 40);
     self.window.movableByWindowBackground = NO;
     self.window.contentView.wantsLayer = YES;
     self.window.level = kCGFloatingWindowLevel;
+    self.window.contentView.layer.backgroundColor = NSColor.clearColor.CGColor;
     
     NSString *savedWindowFrame = [[NSUserDefaults standardUserDefaults] objectForKey:@"savedWindowFrame"];
     if (savedWindowFrame) {
@@ -46,7 +51,7 @@
     
     NSRemoteView *remoteView = [[NSRemoteView alloc] initWithFrame: CGRectMake(0, 0, 1004, 30)];
     [remoteView setSynchronizesImplicitAnimations:NO];
-    [remoteView setServiceName:@"com.github.jslegendre.TouchBarSimulatorService"];
+    [remoteView setServiceName:@"moe.ueharayou.TouchBarSimulatorService"];
     [remoteView setServiceSubclassName:@"TouchBarSimulatorService"];
     [remoteView advanceToRunPhaseIfNeeded:^(NSError *err){
         dispatch_async(dispatch_get_main_queue(), ^(){
@@ -75,7 +80,8 @@
             
         });
     }];
-
+    
+    [self.window orderFrontRegardless];
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {

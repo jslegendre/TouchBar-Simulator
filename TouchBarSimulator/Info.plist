@@ -4,10 +4,10 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
-	<key>CFBundleDisplayName</key>
-	<string>TouchBarSimulatorService</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIconFile</key>
+	<string></string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -19,17 +19,12 @@
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<string>1</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
+	<key>LSUIElement</key>
+	<false/>
 	<key>NSPrincipalClass</key>
-	<string>NSViewServiceApplication</string>
-	<key>XPCService</key>
-	<dict>
-		<key>JoinExistingSession</key>
-		<true/>
-		<key>RunLoopType</key>
-		<string>_NSApplicationMain</string>
-		<key>ServiceType</key>
-		<string>Application</string>
-	</dict>
+	<string>NSApplication</string>
 </dict>
 </plist>
