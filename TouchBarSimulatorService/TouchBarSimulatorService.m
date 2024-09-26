@@ -24,17 +24,14 @@ typedef struct {
 @implementation TouchBarSimulatorStreamView
 
 - (void)mouseEvent:(NSEvent *)event {
+
     
     NSPoint windowLocation = event.locationInWindow;
-    if (self.frame.size.width != 1004) {
-        CGFloat x = (windowLocation.x * 1004) / self.frame.size.width;
-        CGFloat y = (windowLocation.y * 30) / self.frame.size.height;
-        
-        windowLocation.x = x;
-        windowLocation.y = y;
-    }
-    NSPoint location = [self convertPoint:windowLocation fromView:nil];
-    
+    NSPoint viewLocation = [self convertPoint:windowLocation fromView:self];
+    // linear-transforming viewLocation
+    NSPoint location = {viewLocation.x / self.frame.size.width * 1004.0,
+        viewLocation.y / self.frame.size.height * 30.0};
+    //NSLog(@"location:%f, %f, WIN: %f, %f, FRAME: %f.", location.x, location.y, windowLocation.x, windowLocation.y, self.frame.size.width);
     DFRTouchBarSimulatorPostEventWithMouseActivity(self.simulator, event.type, location);
 }
 
@@ -212,11 +209,11 @@ typedef struct {
     _applySmoothing = [lib newFunctionWithName:@"smoothEdges"];
 
     
-    TouchBarSimulatorStreamView *streamView = [[TouchBarSimulatorStreamView alloc] initWithFrame:NSMakeRect(0, 0, 1004, 30)];
+    TouchBarSimulatorStreamView *streamView = [[TouchBarSimulatorStreamView alloc] initWithFrame:NSMakeRect(0, 0, 1004, 30)];// 1004, 30
     [self.view addSubview:streamView];
     streamView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
     
-    self.simulator = DFRTouchBarSimulatorCreate(3, 0, 3);
+    self.simulator = DFRTouchBarSimulatorCreate(3, 0, 3); // 3,0,3
     [streamView setSimulator:self.simulator];
     
     DFRTouchBar *touchBar = DFRTouchBarSimulatorGetTouchBar(self.simulator);
@@ -232,11 +229,14 @@ typedef struct {
     }
 }
 
-- (void)viewWillDisappear {
+- (void) dealloc { // FIXME: VIEWDIDDISAPPEAR INVOKED MULTIPLE TIMES!!
     if (self.touchBarStream) {
         DFRTouchBarSimulatorInvalidate(self.simulator);
         CGDisplayStreamStop(self.touchBarStream);
         CFRelease(self.touchBarStream);
     }
+    NSLog(@"View dealloced."); // FIXME: SEEMS NEVER INVOKED!!!
+    //[super dealloc];
 }
+
 @end
